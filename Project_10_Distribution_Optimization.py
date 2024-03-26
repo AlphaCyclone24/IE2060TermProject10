@@ -2,6 +2,7 @@ import datetime
 from tkinter import *
 from tkinter import ttk
 from tkcalendar import *
+#import pandas as pd
 
 # Getting the current day
 currentyear = datetime.datetime.today().year
@@ -77,6 +78,14 @@ def amount_change():
     global amount
     amount = int(amount_entry.get())
 
+def confirmation_screen():
+    confirmation_window = Toplevel()
+    confirmation_window.geometry("500x400")
+    confirmation_window.configure(background="#CF9FFF")
+
+    confirmation_label = Label(confirmation_window, text=f"The date is {date}, the time is {hour}:{minute} {TOD} for {amount} material for ${final_price}", bg="#CF9FFF", fg="white", font=("yu gothic ui", 13, "bold"))
+    confirmation_label.place(x=10, y=198)
+
 def order_submission():
     date_changed()
     hour_changed()
@@ -85,99 +94,125 @@ def order_submission():
     TOD_change()
     amount_change()
     print(f"The date is {date}, the time is {hour}:{minute} {TOD} for {amount} material")
-
+    confirmation_screen()
 
     monthdifference = abs(deliverymonth - currentmonth) * 30.4167
     daydifference = abs(deliveryday - currentday)
     yeardifference = abs(deliveryyear - currentyear) * 365
     timedifference = monthdifference + daydifference + yeardifference
 
-    if "S" == location:
-        estimatea = s[0] * deliverycost + timedifference * storagecosta
-        print(f"The cost of storage a is {estimatea}")
-        estimateb = s[1] * deliverycost + timedifference * storagecostb
-        print(f"The cost of storage b is {estimateb}")
-        estimatec = s[2] * deliverycost + timedifference * storagecostc
-        print(f"The cost of storage c is {estimatec}")
+    def estimates():
+        global estimates
         estimates = [estimatea, estimateb, estimatec]
         estimates = sorted(estimates)
         print(f"The cost is going to be {estimates[0]}")
+        global final_price
+        final_price = estimates[0]
+
+    if "S" == location:
+        global estimatea
+        estimatea = s[0] * deliverycost + timedifference * storagecosta
+        estimatea = round(estimatea, 2)
+        print(f"The cost of storage a is {estimatea}")
+        global estimateb
+        estimateb = s[1] * deliverycost + timedifference * storagecostb
+        estimateb = round(estimateb, 2)
+        print(f"The cost of storage b is {estimateb}")
+        global estimatec
+        estimatec = s[2] * deliverycost + timedifference * storagecostc
+        estimatec = round(estimatec, 2)
+        print(f"The cost of storage c is {estimatec}")
+        estimates()
+
 
     if "LC" == location:
         estimatea = lc[0] * deliverycost + timedifference * storagecosta
+        estimatea = round(estimatea, 2)
         print(f"The cost of storage a is {estimatea}")
         estimateb = lc[1] * deliverycost + timedifference * storagecostb
+        estimateb = round(estimateb, 2)
         print(f"The cost of storage b is {estimateb}")
         estimatec = lc[2] * deliverycost + timedifference * storagecostc
+        estimatec = round(estimatec, 2)
         print(f"The cost of storage c is {estimatec}")
-        estimates = [estimatea, estimateb, estimatec]
-        estimates = sorted(estimates)
-        print(f"The cost is going to be {estimates[0]}")
+        estimates()
 
     if "LAF" == location:
         estimatea = laf[0] * deliverycost + timedifference * storagecosta
+        estimatea = round(estimatea, 2)
         print(f"The cost of storage a is {estimatea}")
         estimateb = laf[1] * deliverycost + timedifference * storagecostb
+        estimateb = round(estimateb, 2)
         print(f"The cost of storage b is {estimateb}")
         estimatec = laf[2] * deliverycost + timedifference * storagecostc
+        estimatec = round(estimatec, 2)
         print(f"The cost of storage c is {estimatec}")
-        estimates = [estimatea, estimateb, estimatec]
-        estimates = sorted(estimates)
-        print(f"The cost is going to be {estimates[0]}")
+        estimates()
 
     if "BR" == location:
         estimatea = br[0] * deliverycost + timedifference * storagecosta
+        estimatea = round(estimatea, 2)
         print(f"The cost of storage a is {estimatea}")
         estimateb = br[1] * deliverycost + timedifference * storagecostb
+        estimateb = round(estimateb, 2)
         print(f"The cost of storage b is {estimateb}")
         estimatec = br[2] * deliverycost + timedifference * storagecostc
+        estimatec = round(estimatec, 2)
         print(f"The cost of storage c is {estimatec}")
-        estimates = [estimatea, estimateb, estimatec]
-        estimates = sorted(estimates)
-        print(f"The cost is going to be {estimates[0]}")
+        estimates()
 
     if "NO" == location:
         estimatea = no[0] * deliverycost + timedifference * storagecosta
+        estimatea = round(estimatea, 2)
         print(f"The cost of storage a is {estimatea}")
         estimateb = no[1] * deliverycost + timedifference * storagecostb
+        estimateb = round(estimateb, 2)
         print(f"The cost of storage b is {estimateb}")
         estimatec = no[2] * deliverycost + timedifference * storagecostc
+        estimatec = round(estimatec, 2)
         print(f"The cost of storage c is {estimatec}")
-        estimates = [estimatea, estimateb, estimatec]
-        estimates = sorted(estimates)
-        print(f"The cost is going to be {estimates[0]}")
+        estimates()
 
 
 # Create Entry that will accept date of birth after clicking on submit
 date_label = Label(root, text="Date of Delivery: ", bg="#CF9FFF", fg="white", font=("yu gothic ui", 13, "bold"))
 date_label.place(x=10, y=158)
 
+# Set up for hour label on order screen
 hour_label = Label(root, text="Time of Delivery: ", bg="#CF9FFF", fg="white", font=("yu gothic ui", 13, "bold"))
 hour_label.place(x=10, y=198)
 
+# Set up for location label on order screen
 location_label = Label(root, text="Location of Delivery: ", bg="#CF9FFF", fg="white", font=("yu gothic ui", 13, "bold"))
 location_label.place(x=10, y=238)
 
+# Set up for amount label on order screen
 amount_label = Label(root, text="Amount of Material: ", bg="#CF9FFF", fg="white", font=("yu gothic ui", 13, "bold"))
 amount_label.place(x=10, y=278)
 
+# Set up for date entry
 date_entry = Entry(root, highlightthickness=0, relief=FLAT, bg="white", fg="#6b6a69", font=("yu gothic ui", 12, "bold"))
 date_entry.place(x=160, y=160, width=200)
 date_entry.insert(0, "dd/mm/yyy")
 date_entry.bind("<1>", pick_date)
 
+# Creates a dropdown menu for hour of deliver
 hour_entry = ttk.Combobox(state="readonly", value=["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"])
 hour_entry.place(x=160, y=205, width=50)
 
+# Creates a dropdown menu for minute of deliver
 minute_entry = ttk.Combobox(state="readonly", value=["00", "15", "30", "45"])
 minute_entry.place(x=220, y=205, width=50)
 
+# Creates dropdown menu for if the delivery is in the am or pm
 TOD_entry = ttk.Combobox(state="readonly", values=["am", "pm"])
 TOD_entry.place(x=280, y=205, width=50)
 
+# Creates a dropdown menu for location of deliver
 location_entry = ttk.Combobox(state="readonly", value=["S", "LC", "LAF", "BR", "NO"])
 location_entry.place(x=185, y=245, width=50)
 
+# Creates a number input for amount of materials
 amount_entry = Entry(root, highlightthickness=0, relief=FLAT, bg="white", fg="#6b6a69", font=("yu gothic ui", 12, "bold"))
 amount_entry.place(x=185, y=280, width=50)
 
